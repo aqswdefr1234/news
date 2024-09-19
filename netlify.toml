@@ -3,4 +3,4 @@
   publish = "public"
 
 [functions]
-  runtime = "python"
+  node_bundler = "esbuild"
