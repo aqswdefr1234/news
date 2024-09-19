@@ -1,0 +1,15 @@
+{
+  "name": "netlify-python-news",
+  "version": "1.0.0",
+  "description": "Netlify Functions with Node.js executing Python script",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "scripts": {
+    "build": "npm install",
+    "start": "netlify dev"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}
