@@ -3,13 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>뉴스 검색 결과</title>
+    <title>코인 뉴스 검색</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #1a1a1a; /* 다크 모드 배경 */
+            color: #f1f1f1;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #ffcc00; /* 코인 상징 금색 */
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        button {
+            padding: 15px 25px;
+            background-color: #333; /* 버튼의 다크 테마 */
+            color: #ffcc00; /* 금색 글씨 */
+            border: 2px solid #ffcc00;
+            border-radius: 50px; /* 둥근 버튼 */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            font-size: 18px;
+        }
+        button:hover {
+            background-color: #ffcc00; /* 버튼 호버 시 금색 */
+            color: #333;
+            transform: scale(1.1); /* 확대 효과 */
+        }
+        #news-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #262626; /* 뉴스 카드 배경 다크 */
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        .news-item {
+            border-bottom: 1px solid #444;
+            padding: 20px 0;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-item h3 {
+            margin: 0;
+            font-size: 22px;
+            color: #ffffff;
+        }
+        .news-item a {
+            color: #66fcf1; /* 청록색 링크 */
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .news-item a:hover {
+            color: #ffcc00; /* 링크 호버 시 금색 */
+        }
+        .news-item p {
+            color: #bbbbbb;
+            font-size: 14px;
+        }
+        .news-item .date {
+            font-style: italic;
+            color: #999;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>뉴스 검색 결과</h1>
-    <button onclick="fetchNews('비트코인')">비트코인</button>
-    <button onclick="fetchNews('이더리움')">이더리움</button>
-    <button onclick="fetchNews('도지')">도지</button>
+    <h1>코인 뉴스 검색</h1>
+    <div class="button-container">
+        <button onclick="fetchNews('비트코인')">비트코인</button>
+        <button onclick="fetchNews('이더리움')">이더리움</button>
+        <button onclick="fetchNews('도지')">도지</button>
+    </div>
     
     <div id="news-container"></div>
 
@@ -21,9 +97,19 @@
             const container = document.getElementById("news-container");
             container.innerHTML = "";
 
+            if (newsData.length === 0) {
+                container.innerHTML = "<p>검색된 뉴스가 없습니다.</p>";
+                return;
+            }
+
             newsData.forEach(news => {
                 const newsItem = document.createElement("div");
-                newsItem.innerHTML = `<h3>${news.title}</h3><a href="${news.link}" target="_blank">기사 링크</a><p>발행일: ${news.published}</p>`;
+                newsItem.classList.add("news-item");
+                newsItem.innerHTML = `
+                    <h3>${news.title}</h3>
+                    <a href="${news.link}" target="_blank">기사 링크</a>
+                    <p class="date">발행일: ${news.published}</p>
+                `;
                 container.appendChild(newsItem);
             });
         }
