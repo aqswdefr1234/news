@@ -1,14 +1,14 @@
 {
-  "name": "netlify-python-news",
+  "name": "node-rss-news",
   "version": "1.0.0",
-  "description": "Netlify Functions with Node.js executing Python script",
+  "description": "Node.js-based RSS news fetcher",
   "main": "index.js",
-  "dependencies": {
-    "express": "^4.17.1"
-  },
   "scripts": {
-    "build": "npm install",
-    "start": "netlify dev"
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "xml2js": "^0.4.23"
   },
   "author": "Your Name",
   "license": "MIT"
