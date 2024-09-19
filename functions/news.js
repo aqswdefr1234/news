@@ -12,19 +12,27 @@ async function getNews(keyword) {
     const now = new Date();
     const oneWeekAgo = new Date(now.setDate(now.getDate() - 7));
     
-    result.rss.channel[0].item.forEach(item => {
-      const pubDate = new Date(item.pubDate[0]);
-      if (pubDate > oneWeekAgo) {
-        console.log(`제목: ${item.title[0]}`);
-        console.log(`링크: ${item.link[0]}`);
-        console.log(`발행일: ${pubDate}`);
-        console.log();
-      }
-    });
+    const newsData = result.rss.channel[0].item
+      .filter(item => new Date(item.pubDate[0]) > oneWeekAgo)
+      .map(item => ({
+        title: item.title[0],
+        link: item.link[0],
+        published: new Date(item.pubDate[0]).toLocaleString(),
+      }));
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(newsData),
+    };
   } catch (error) {
-    console.error('Error fetching news:', error);
+    return {
+      statusCode: 500,
+      body: `Error fetching news: ${error.message}`,
+    };
   }
 }
 
-const keyword = process.argv[2] || '비트코인';
-getNews(keyword);
+exports.handler = async function (event, context) {
+  const keyword = event.queryStringParameters.keyword || '비트코인';
+  return await getNews(keyword);
+};
