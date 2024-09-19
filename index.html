@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>뉴스 검색</title>
+    <title>뉴스 검색 결과</title>
 </head>
 <body>
     <h1>뉴스 검색 결과</h1>
@@ -19,7 +19,7 @@
                 return;
             }
 
-            const response = await fetch(`/.netlify/functions/get_news?keyword=${keyword}`);
+            const response = await fetch(`/.netlify/functions/news?keyword=${keyword}`);
             const newsData = await response.json();
             
             const container = document.getElementById("news-container");
