@@ -25,9 +25,10 @@ async function getNews(keyword) {
       body: JSON.stringify(newsData),
     };
   } catch (error) {
+    console.error('Error fetching news:', error); // 콘솔에 에러 메시지 출력
     return {
       statusCode: 500,
-      body: `Error fetching news: ${error.message}`,
+      body: JSON.stringify({ message: `Error fetching news: ${error.message}` }),  // JSON 형식으로 에러 반환
     };
   }
 }
