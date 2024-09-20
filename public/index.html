@@ -44,6 +44,30 @@
             background-color: #ffcc00; /* 선택된 버튼의 색상 */
             color: #333;
         }
+        .search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .search-container input {
+            padding: 10px;
+            font-size: 18px;
+            width: 300px;
+            border-radius: 50px;
+            border: 2px solid #ffcc00;
+            background-color: #333;
+            color: #fff;
+        }
+        .search-container button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #ffcc00;
+            color: #333;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 18px;
+        }
         #news-container {
             max-width: 900px;
             margin: 0 auto;
@@ -85,6 +109,13 @@
 </head>
 <body>
     <h1>코인 뉴스 검색</h1>
+    
+    <!-- 검색 버튼과 검색 창 추가 -->
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="다른 코인 이름 입력..." />
+        <button onclick="searchNews()">검색</button>
+    </div>
+    
     <div class="button-container">
         <button id="bitcoin-btn" class="active" onclick="fetchNews('비트코인', this)">비트코인</button>
         <button onclick="fetchNews('이더리움', this)">이더리움</button>
@@ -103,7 +134,7 @@
 
         // 뉴스 가져오기 함수 (최신 날짜순으로 정렬 포함)
         async function fetchNews(keyword, button) {
-            setActiveButton(button);
+            if (button) setActiveButton(button); // 버튼을 클릭한 경우에만 active 클래스 설정
             const response = await fetch(`/.netlify/functions/news?keyword=${keyword}`);
             let newsData = await response.json();
             
@@ -128,6 +159,14 @@
                 `;
                 container.appendChild(newsItem);
             });
+        }
+
+        // 사용자 입력으로 코인 뉴스 검색하기
+        function searchNews() {
+            const searchInput = document.getElementById("search-input").value.trim();
+            if (searchInput) {
+                fetchNews(searchInput);
+            }
         }
 
         // 페이지 로드 시 비트코인 뉴스 기본 로드
