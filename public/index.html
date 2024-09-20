@@ -118,8 +118,8 @@
     
     <div class="button-container">
         <button id="bitcoin-btn" class="active" onclick="fetchNews('비트코인', this)">비트코인</button>
-        <button onclick="fetchNews('이더리움', this)">이더리움</button>
-        <button onclick="fetchNews('도지', this)">도지</button>
+        <button id="ethereum-btn" onclick="fetchNews('이더리움', this)">이더리움</button>
+        <button id="doge-btn" onclick="fetchNews('도지', this)">도지</button>
     </div>
     
     <div id="news-container"></div>
@@ -129,12 +129,20 @@
         function setActiveButton(selectedButton) {
             const buttons = document.querySelectorAll('.button-container button');
             buttons.forEach(button => button.classList.remove('active'));
-            selectedButton.classList.add('active');
+            if (selectedButton) {
+                selectedButton.classList.add('active');
+            }
         }
 
         // 뉴스 가져오기 함수 (최신 날짜순으로 정렬 포함)
         async function fetchNews(keyword, button) {
-            if (button) setActiveButton(button); // 버튼을 클릭한 경우에만 active 클래스 설정
+            // 버튼 클릭 시 검색창에 해당 코인 이름 채워 넣기
+            const searchInput = document.getElementById('search-input');
+            searchInput.value = keyword;
+
+            // 버튼이 클릭된 경우 active 클래스 설정
+            setActiveButton(button);
+            
             const response = await fetch(`/.netlify/functions/news?keyword=${keyword}`);
             let newsData = await response.json();
             
@@ -166,6 +174,7 @@
             const searchInput = document.getElementById("search-input").value.trim();
             if (searchInput) {
                 fetchNews(searchInput);
+                setActiveButton(null); // 버튼 비활성화
             }
         }
 
