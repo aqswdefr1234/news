@@ -40,6 +40,10 @@
             color: #333;
             transform: scale(1.1); /* 확대 효과 */
         }
+        button.active {
+            background-color: #ffcc00; /* 선택된 버튼의 색상 */
+            color: #333;
+        }
         #news-container {
             max-width: 900px;
             margin: 0 auto;
@@ -82,18 +86,30 @@
 <body>
     <h1>코인 뉴스 검색</h1>
     <div class="button-container">
-        <button onclick="fetchNews('비트코인')">비트코인</button>
-        <button onclick="fetchNews('이더리움')">이더리움</button>
-        <button onclick="fetchNews('도지')">도지</button>
+        <button id="bitcoin-btn" class="active" onclick="fetchNews('비트코인', this)">비트코인</button>
+        <button onclick="fetchNews('이더리움', this)">이더리움</button>
+        <button onclick="fetchNews('도지', this)">도지</button>
     </div>
     
     <div id="news-container"></div>
 
     <script>
-        async function fetchNews(keyword) {
+        // 버튼 색상 초기화 및 선택된 버튼 활성화
+        function setActiveButton(selectedButton) {
+            const buttons = document.querySelectorAll('.button-container button');
+            buttons.forEach(button => button.classList.remove('active'));
+            selectedButton.classList.add('active');
+        }
+
+        // 뉴스 가져오기 함수 (최신 날짜순으로 정렬 포함)
+        async function fetchNews(keyword, button) {
+            setActiveButton(button);
             const response = await fetch(`/.netlify/functions/news?keyword=${keyword}`);
-            const newsData = await response.json();
+            let newsData = await response.json();
             
+            // 최신 뉴스가 상단에 오도록 정렬
+            newsData.sort((a, b) => new Date(b.published) - new Date(a.published));
+
             const container = document.getElementById("news-container");
             container.innerHTML = "";
 
@@ -113,6 +129,11 @@
                 container.appendChild(newsItem);
             });
         }
+
+        // 페이지 로드 시 비트코인 뉴스 기본 로드
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchNews('비트코인', document.getElementById('bitcoin-btn'));
+        });
     </script>
 </body>
 </html>
